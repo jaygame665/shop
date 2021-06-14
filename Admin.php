@@ -181,7 +181,7 @@ body {
       </tr>
     </table>
       <form action="<?php echo $editFormAction; ?>" method="POST" enctype="multipart/form-data" name="form1" id="form1">
-        <p>เพิ่มข้อมูลสินค้า</p>
+        <p>เพิ่มข้อมูลสินค้า demo</p>
         <p>
           <label for="prdName">ชื่อสินค้า</label>
           <input type="text" name="prdName" id="prdName" />
