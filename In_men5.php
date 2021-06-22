@@ -53,7 +53,7 @@ body {
         <td><img src="images/menshop_17.jpg" width="280" height="78" /></td>
       </tr>
     </table>      &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;</td>
-    <td width="744" valign="top"><a href="In_men.php">ย้อนกลับ</a></td>
+    <td width="744" valign="top"><a href="Admin.php">ย้อนกลับ</a></td>
   </tr>
 </table>
 <p>&nbsp;</p>

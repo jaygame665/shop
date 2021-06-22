@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <?php
+header('Content-Type: text/html; charset=utf-8');
 $con = mysqli_connect("localhost","root","","menshop");
 mysqli_set_charset($con,"utf8");
 
@@ -92,11 +93,15 @@ while($row=mysqli_fetch_array($result,MYSQLI_ASSOC)){
           
           <?php 
 
-          if($_SESSION['MM_level'] == '1'){
+          if($_SESSION['MM_level'] == '1')
+          {
             echo '<a href="Edit.php?id='.$row['id'].'" type="button" name="add_product" style="margin-top:5px;" class="btn btn-warning" >แก้ไขรายละเอียด<a>';
+            
+            
           }else{
             echo '<input type="submit" name="add_product" style="margin-top:5px;" class="btn btn-success" value="เพิ่มลงตะกร้า" />';
           }
+          
           ?>
 
         </div>

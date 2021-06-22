@@ -83,14 +83,25 @@ if (isset($_SERVER['QUERY_STRING'])) {
 }
 
 if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
-  $insertSQL = sprintf("INSERT INTO product (prd_img, prd_name, prd_price, prd_detail) VALUES (%s, %s, %s, %s)",
-                       GetSQLValueString(Upload($_FILES['prdImg']), "text"),
-                       GetSQLValueString($_POST['prdName'], "text"),
-                       GetSQLValueString($_POST['prdPrice'], "text"),
-                       GetSQLValueString($_POST['prdDetail'], "text"));
+  $img = (!empty(Upload($_FILES['prdImg']))? Upload($_FILES['prdImg']): $_POST['prdImg2']);
 
+  // $insertSQL = sprintf("INSERT INTO product (prd_img, prd_name, prd_price, prd_detail,prd_status) VALUES (%s, %s, %s, %s, %s)",
+  //                      GetSQLValueString(Upload($_FILES['prdImg']), "text"),
+  //                      GetSQLValueString($_POST['prdName'], "text"),
+  //                      GetSQLValueString($_POST['prdPrice'], "text"),
+  //                      GetSQLValueString($_POST['prdDetail'], "text"),
+  //                      GetSQLValueString($_POST['prdStatus'], "text"));
+
+  // mysql_select_db($database_menshop, $menshop);
+  // $Result1 = mysql_query($insertSQL, $menshop) or die(mysql_error());
+
+
+  
   mysql_select_db($database_menshop, $menshop);
-  $Result1 = mysql_query($insertSQL, $menshop) or die(mysql_error());
+  $query_Recordset1 = "INSERT INTO product (prd_img, prd_name, prd_price, prd_detail,prd_status) VALUES ('".$img."', '".$_POST['prdName']."', '".$_POST['prdPrice']."', '".$_POST['prdDetail']."', '".$_POST['prdStatus']."')";
+  
+  $Recordset1 = mysql_query($query_Recordset1, $menshop) or die(mysql_error());
+
 
   $insertGoTo = "In_men5.php";
   if (isset($_SERVER['QUERY_STRING'])) {
@@ -183,6 +194,7 @@ body {
       <form action="<?php echo $editFormAction; ?>" method="POST" enctype="multipart/form-data" name="form1" id="form1">
         <p>เพิ่มข้อมูลสินค้า</p>
         <p>
+          <br />
           <label for="prdName">ชื่อสินค้า</label>
           <input type="text" name="prdName" id="prdName" />
           <br />
@@ -194,6 +206,9 @@ body {
           <br />
           <label for="prdImg">รูปสินค้า</label>
           <input type="file" name="prdImg" id="prdImg" />
+          <br />
+          <label for="prdName">รหัสสินค้า</label>
+          <input type="text" name="prdStatus" id="prdStatus" />
           <br />
           <input type="submit" name="prdSave" id="prdSave" value="บันทึก" />
         </p>

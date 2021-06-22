@@ -3,6 +3,11 @@
 <?php
 $con = mysqli_connect("localhost","root","","menshop");
 mysqli_set_charset($con,"utf8");
+
+if (!isset($_SESSION)) {
+  session_start();
+}
+// print_r($_SESSION)
 ?>
 
 <head>
@@ -85,6 +90,15 @@ while($row=mysqli_fetch_array($result,MYSQLI_ASSOC)){
           <input type="hidden" name="hidden_name" value="<?php echo $row['prd_name'];?>"/>
           <input type="hidden" name="hidden_price" value="<?php echo $row['prd_price'];?>"/>
           <input type="submit" name="add_product" style="margin-top:5px;" class="btn btn-success" value="เพิ่มลงตะกร้า" />
+   
+          <?php 
+
+          if($_SESSION['MM_level'] == '1'){
+            echo '<a href="Edit.php?id='.$row['id'].'" type="button" name="add_product" style="margin-top:5px;" class="btn btn-warning" >แก้ไขรายละเอียด<a>';
+          }else{
+            echo '<input type="submit" name="add_product" style="margin-top:5px;" class="btn btn-success" value="เพิ่มลงตะกร้า" />';
+          }
+          ?>
 
         </div>
         </form>

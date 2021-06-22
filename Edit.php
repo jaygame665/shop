@@ -1,6 +1,13 @@
-<?php require_once('Connections/menshop.php'); ?>
+<?php 
+header('Content-Type: text/html; charset=utf-8');
+require_once('Connections/menshop.php'); ?>
 <?php include("Upload.php"); ?>
 <?php
+$con = mysqli_connect("localhost","root","","menshop");
+// $con->set_charset("utf8");
+mysqli_set_charset($con,"utf8");
+
+
 if (!isset($_SESSION)) {
   session_start();
 }
@@ -82,35 +89,35 @@ if (isset($_SERVER['QUERY_STRING'])) {
   $editFormAction .= "?" . htmlentities($_SERVER['QUERY_STRING']);
 }
 
-if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
-  $insertSQL = sprintf("INSERT INTO product (prd_img, prd_name, prd_price, prd_detail) VALUES (%s, %s, %s, %s)",
-                       GetSQLValueString(Upload($_FILES['prdImg']), "text"),
-                       GetSQLValueString($_POST['prdName'], "text"),
-                       GetSQLValueString($_POST['prdPrice'], "text"),
-                       GetSQLValueString($_POST['prdDetail'], "text"));
+// if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "form1")) {
+//   $insertSQL = sprintf("INSERT INTO product (prd_img, prd_name, prd_price, prd_detail) VALUES (%s, %s, %s, %s)",
+//                        GetSQLValueString(Upload($_FILES['prdImg']), "text"),
+//                        GetSQLValueString($_POST['prdName'], "text"),
+//                        GetSQLValueString($_POST['prdPrice'], "text"),
+//                        GetSQLValueString($_POST['prdDetail'], "text"));
 
-  mysql_select_db($database_menshop, $menshop);
-  $Result1 = mysql_query($insertSQL, $menshop) or die(mysql_error());
+//   mysql_select_db($database_menshop, $menshop);
+//   $Result1 = mysql_query($insertSQL, $menshop) or die(mysql_error());
 
-  $insertGoTo = "In_men5.php";
-  if (isset($_SERVER['QUERY_STRING'])) {
-    $insertGoTo .= (strpos($insertGoTo, '?')) ? "&" : "?";
-    $insertGoTo .= $_SERVER['QUERY_STRING'];
-  }
-  header(sprintf("Location: %s", $insertGoTo));
-}
+//   $insertGoTo = "In_men5.php";
+//   if (isset($_SERVER['QUERY_STRING'])) {
+//     $insertGoTo .= (strpos($insertGoTo, '?')) ? "&" : "?";
+//     $insertGoTo .= $_SERVER['QUERY_STRING'];
+//   }
+//   header(sprintf("Location: %s", $insertGoTo));
+// }
 
-if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "addprd")) {
-  $insertSQL = sprintf("INSERT INTO tbl_product (p_name, p_detail, p_price, p_img) VALUES (%s, %s, %s, %s)",
-                       GetSQLValueString($_POST['p_name'], "text"),
-                       GetSQLValueString($_POST['p_detail'], "text"),
-                       GetSQLValueString($_POST['p_price'], "double"),
-                       GetSQLValueString($_POST['p_img'], "text"));
+// if ((isset($_POST["MM_insert"])) && ($_POST["MM_insert"] == "addprd")) {
+//   $insertSQL = sprintf("INSERT INTO tbl_product (p_name, p_detail, p_price, p_img) VALUES (%s, %s, %s, %s)",
+//                        GetSQLValueString($_POST['p_name'], "text"),
+//                        GetSQLValueString($_POST['p_detail'], "text"),
+//                        GetSQLValueString($_POST['p_price'], "double"),
+//                        GetSQLValueString($_POST['p_img'], "text"));
                     
 
-  mysql_select_db($database_menshop, $menshop);
-  $Result1 = mysql_query($insertSQL, $menshop) or die(mysql_error());
-}
+//   mysql_select_db($database_menshop, $menshop);
+//   $Result1 = mysql_query($insertSQL, $menshop) or die(mysql_error());
+// }
 
 mysql_select_db($database_menshop, $menshop);
 $query_Recordset1 = "SELECT * FROM tm_member";
@@ -179,36 +186,73 @@ body {
       <tr>
         <td><img src="images/Admin-resized-2.jpg" width="192" height="108" /></td>
       </tr>
+
+    <?php
+
+      
+
+      if ((isset($_POST["MM_update"])) && ($_POST["MM_update"] == "form2")) {
+
+        $img = (!empty(Upload($_FILES['prdImg']))? Upload($_FILES['prdImg']): $_POST['prdImg2']);
+
+        // $updateSQL = sprintf("UPDATE product SET prd_img = '".$img."', prd_name = '".$_POST['prdName']."',
+        //                       prd_price = '".$_POST['prdPrice']."', prd_detail = '".$_POST['prdDetail']."'
+        //                       WHERE id = '".$_POST['id']."' ");
+
+        mysql_select_db($database_menshop, $menshop);
+        $query_Recordset1 = "UPDATE product SET prd_img = '".$img."', prd_name = '".$_POST['prdName']."',
+        prd_price = '".$_POST['prdPrice']."', prd_detail = '".$_POST['prdDetail']."'
+        WHERE id = '".$_POST['id']."'";
+        
+        $Recordset1 = mysql_query($query_Recordset1, $menshop) or die(mysql_error());
+
+        // mysql_select_db($database_menshop, $menshop);
+        // mysql_query($updateSQL, $menshop) or die(mysql_error());
+      }
+
+      $result = mysqli_query($con, "select * from product where id = '".$_GET['id']."' ");
+      while($row=mysqli_fetch_array($result,MYSQLI_ASSOC)){
+    ?>
+
     </table>
       <form action="<?php echo $editFormAction; ?>" method="POST" enctype="multipart/form-data" name="form1" id="form1">
         <p>แก้ไขข้อมูลสินค้า</p>
         <p>
           <label for="prdName">ชื่อสินค้า</label>
-          <input type="text" name="prdName" id="prdName" />
+          <input type="hidden" name="MM_update" value="form2">
+          <input type="hidden" name="id" value="<?=$row['id']?>">
+          <input type="text" name="prdName" id="prdName" value="<?=$row['prd_name']?>" />
           <br />
           <label for="prdPrice">ราคาสินค้า</label>
-          <input type="text" name="prdPrice" id="prdPrice" />
+          <input type="text" name="prdPrice" id="prdPrice" value="<?=$row['prd_price']?>" />
           <br />
           <label for="prdDetail">รายละเอียดสินค้า</label>
-          <textarea name="prdDetail" id="prdDetail" cols="45" rows="5"></textarea>
+          <textarea name="prdDetail" id="prdDetail" cols="45" rows="5"><?=$row['prd_detail']?></textarea>
           <br />
-          <label for="prdImg">รูปสินค้า</label>
+          <label for="prdImg">รูปสินค้า </label>
+          <input type="hidden" name="prdImg2" id="prdImg2" value="<?=$row['prd_img']?>" />
+          <img src="products-img/<?=$row['prd_img']?>" width="120" class="img-responsive">
           <input type="file" name="prdImg" id="prdImg" />
-          <br />
+          <br /><br />
           <input type="submit" name="prdSave" id="prdSave" value="บันทึก" />
         </p>
-        <input type="hidden" name="MM_insert" value="form1" />
+        <!-- <input type="hidden" name="MM_insert" value="form1" /> -->
       </form>
       <p>&nbsp;</p>
     
     </tr>
 </table>
+
+<?php } ?>
 <p>&nbsp;</p>
+
+
+
 <script type="text/javascript">
 var spryselect1 = new Spry.Widget.ValidationSelect("spryselect1");
 </script>
 </body>
 </html>
 <?php
-mysql_free_result($Recordset1);
+// mysql_free_result($Recordset1);
 ?>
